@@ -1,5 +1,4 @@
 import axios from "axios";
-import type { AxiosResponse } from "axios";
 import type { Movie } from "../types/movie";
 
 interface FetchMoviesResponse {
@@ -16,17 +15,14 @@ const movieApi = axios.create({
 });
 
 export async function fetchMovies(query: string): Promise<Movie[]> {
-  const response: AxiosResponse<FetchMoviesResponse> = await movieApi.get(
-    "/search/movie",
-    {
-      params: {
-        query,
-        include_adult: false,
-        language: "en-US",
-        page: 1,
-      },
+  const response = await movieApi.get<FetchMoviesResponse>("/search/movie", {
+    params: {
+      query,
+      include_adult: false,
+      language: "en-US",
+      page: 1,
     },
-  );
+  });
 
   return response.data.results;
 }
